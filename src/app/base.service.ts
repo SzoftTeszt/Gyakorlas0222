@@ -1,27 +1,46 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { GoogleAuthProvider } from '@angular/fire/auth';
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BaseService {
-
   url="https://fleet-d5851-default-rtdb.firebaseio.com/cars"
-
-
+  token:any
   private carsSub = new Subject()
-
-  constructor(private http:HttpClient) { 
+  constructor(private http:HttpClient, private afAuth:AngularFireAuth ) { 
     this.downlaodCars()
+    
+    this.afAuth.authState.subscribe(
+      (user)=>{
+        if (user) {
+          user.getIdToken().then((t)=>
+            {
+              this.token=t
+              console.log("Token", this.token)
+            })
+        }
+        else this.token=null
+      }
+    )
+  
   }
-
+  googeAuth(){
+    this.afAuth.signInWithPopup(new GoogleAuthProvider())
+  }
+  sighOut(){
+    this.afAuth.signOut()
+  }
   getCars(){
     return this.carsSub
   }
 
   addCar(car:any){
-    this.http.post(this.url+".json",car).forEach(
+    let headers = new HttpHeaders().set('Authorization',"Bearer "+this.token)
+    this.http.post(this.url+".json?auth="+this.token,car,{headers}).forEach(
       ()=>this.downlaodCars()
     )
   }

@@ -9,7 +9,7 @@ import { BaseService } from '../base.service';
 export class CarsComponent {
 
     cars:any
-    newCar:any
+    newCar:any={}
     constructor(private base:BaseService){
 
       this.base.getCars().subscribe(
@@ -23,5 +23,12 @@ export class CarsComponent {
 
     addCar(){
       this.base.addCar(this.newCar)
+    }
+
+    deleteCar(car:any){
+      this.base.deleteCar(car)
+    }
+    putCar(car:any){
+      this.base.putCar(car)
     }
 }

@@ -2,3 +2,27 @@
 
 
 <p>{{cars|json}}</p>
+
+<div class="row">
+    <div class="col">Típus</div>
+    <div class="col">Rendszám</div>
+    <div class="col">Műveletek</div>
+</div>
+
+<div class="row my-2">
+    <div class="col"><input [(ngModel)]="newCar.tipus"></div>
+    <div class="col"><input [(ngModel)]="newCar.rendszam"></div>
+    <div class="col">
+        <button (click)="addCar()" class="">Hozzáadás</button>
+        
+    </div>
+</div>
+
+<div *ngFor="let car of cars" class="row my-2">
+    <div class="col"><input [(ngModel)]="car.tipus"></div>
+    <div class="col"><input [(ngModel)]="car.rendszam"></div>
+    <div class="col">
+        <button (click)="putCar(car)" class="">Módosítás</button>
+        <button (click)="deleteCar(car)" class="ms-2">Törlés</button>
+    </div>
+</div>
